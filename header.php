@@ -5,6 +5,5 @@
       href="./" 
       class="btnHome">Home</a>
       <a 
-      href="./contact.php" 
-      class="btnContact">Contact</a>
+      href="search_contact.php">Chercher un Contact</a>
 </nav>

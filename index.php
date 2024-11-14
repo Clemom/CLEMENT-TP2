@@ -1,68 +1,65 @@
-<?php require_once('data.php') ?>
-<?php require_once("./header.php") ?>
-<?php require_once("./footer.php") ?>
-<?php require_once("./connect.php") ?>
+<?php require_once("./header.php")?>
+<?php require_once './data.php';
+$contacts = getAllContacts();
+?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <link href="./css/style.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TP2-CLEMENT</title>
+    <link href="./css/style.css" rel="stylesheet">
+    <title>Gestion des Contacts</title>
 </head>
 
 <body>
+    <nav></nav>
+    <h1>Gestion des Contacts</h1>
 
-    <div class="fullForm">
-        <form method="POST" action="data.php" class="form">
-            <div class="allInput">
-                <h1>Formulaire</h1>
-                <div class="name">
-                    <label for="name">
-                        Nom
-                    </label>
-                    <input
-                        name="name"
-                        class="inputName"
-                        id="name"
-                        type="text"
-                        placeholder="Nom">
-                </div>
+    <h2>Ajouter un contact</h2>
+    <form method="POST" action="add_contact.php">
+        <div>
+            <label for="name">Nom :</label>
+            <input type="text" name="name" id="name" required>
+        </div>
+        <div>
+            <label for="telephone">Téléphone :</label>
+            <input type="tel" name="telephone" id="telephone" required>
+        </div>
+        <div>
+            <label for="email">Email :</label>
+            <input type="email" name="email" id="email" required>
+        </div>
+        <button type="submit">Ajouter</button>
+    </form>
 
-                <div class="telephone">
-                    <label for="telephone">
-                        Téléphone
-                    </label>
-                    <input
-                        name="telephone"
-                        class="inputTelephone"
-                        id="telephone"
-                        type="tel"
-                        placeholder="Téléphone">
-                </div>
-                <div class="email">
-                    <label class="" for="email">
-                        Email
-                    </label>
-                    <input
-                        name="email"
-                        class="inputMail"
-                        id="email"
-                        type="email"
-                        placeholder="Email">
-                </div>
-            
-            <button type="submit" class="btnAddContact">
-                Ajouter un Contact
-            </button>
-            </div>
-        </form>
-    </div>
-
-
+    <h2>Liste des contacts</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Téléphone</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($contacts as $contact): ?>
+                <tr>
+                    <td><?= htmlspecialchars($contact['name']) ?></td>
+                    <td><?= htmlspecialchars($contact['telephone']) ?></td>
+                    <td><?= htmlspecialchars($contact['email']) ?></td>
+                    <td>
+                        <a href="edit.php?id=<?= $contact['id'] ?>">Modifier</a>
+                        <a href="delete_contact.php?id=<?= $contact['id'] ?>">Supprimer</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </body>
-
+<?php require_once("./footer.php");?>
 
 </html>

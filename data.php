@@ -1,33 +1,77 @@
 <?php
-require_once("./connect.php");
+require_once './db.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $name = isset($_POST['name']) ? $_POST['name'] : '';
-    $telephone = isset($_POST['telephone']) ? $_POST['telephone'] : '';
-    $email = isset($_POST['email']) ? $_POST['email'] : '';
-    if (!empty($name) && !empty($telephone) && !empty($email)) {
-        $conn->query("INSERT INTO `user` (`name`, `email`, `telephone`) VALUES ('$name', '$email', '$telephone')");
-    }
-    
+/**
+ * Ajouter un contact dans la base de données
+ * 
+ * @param string $name Le nom du contact
+ * @param string $email L'email du contact
+ * @param string $telephone Le numéro de téléphone du contact
+ * @return bool Succès ou échec de l'opération
+ */
+function addContact($name, $email, $telephone) {
+    $conn = connectDB();
+    $query = $conn->prepare("INSERT INTO contact (name, email, telephone) VALUES (:name, :email, :telephone)");
+    $query->bindParam(':name', $name);
+    $query->bindParam(':email', $email);
+    $query->bindParam(':telephone', $telephone);
+    return $query->execute();
 }
 
+/**
+ * Récupérer tous les contacts
+ * 
+ * @return array Liste de tous les contacts
+ */
+function getAllContacts() {
+    $conn = connectDB();
+    $query = $conn->query("SELECT * FROM contact");
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
 
-function afficherContact($conn) {
-    $data = $conn->query("SELECT * FROM user");
-    if ( !empty($data)) {
-        foreach ($data as $row) {
-            echo "<tr>";
-            echo "<td class='px-4 py-2 border'>" . $row['name']. "</td>";
-            echo "<td class='px-4 py-2 border'>" . $row['telephone'] . "</td>";
-            echo "<td class='px-4 py-2 border'>" . $row['email'] . "</td>";
-            echo "</tr>";
-            
-        }
-    } else {
-        echo "<tr><td colspan='3' class='px-4 py-2 border text-center'>Aucun contact ajouté.</td></tr>";
-    }
+/**
+ * Supprimer un contact par ID
+ * 
+ * @param int $id L'ID du contact
+ * @return bool Succès ou échec de la suppression
+ */
+function deleteContact($id) {
+    $conn = connectDB();
+    $query = $conn->prepare("DELETE FROM contact WHERE id = :id");
+    $query->bindParam(':id', $id, PDO::PARAM_INT);
+    return $query->execute();
 }
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    header('Location: index.php');
-    exit;
+
+/**
+ * Mettre à jour un contact
+ * 
+ * @param int $id L'ID du contact
+ * @param string $name Le nouveau nom du contact
+ * @param string $email Le nouvel email du contact
+ * @param string $telephone Le nouveau numéro de téléphone du contact
+ * @return bool Succès ou échec de la mise à jour
+ */
+function updateContact($id, $name, $email, $telephone) {
+    $conn = connectDB();
+    $query = $conn->prepare("UPDATE contact SET name = :name, email = :email, telephone = :telephone WHERE id = :id");
+    $query->bindParam(':id', $id, PDO::PARAM_INT);
+    $query->bindParam(':name', $name);
+    $query->bindParam(':email', $email);
+    $query->bindParam(':telephone', $telephone);
+    return $query->execute();
 }
+
+/**
+ * Récupérer un contact par ID
+ * 
+ * @param int $id L'ID du contact
+ * @return array|null Les informations du contact ou null si non trouvé
+ */
+function getContact($id) {
+    $conn = connectDB();
+    $query = $conn->prepare("SELECT * FROM contact WHERE id = :id");
+    $query->bindParam(':id', $id, PDO::PARAM_INT);
+    $query->execute();
+    return $query->fetch(PDO::FETCH_ASSOC);
+}
+
