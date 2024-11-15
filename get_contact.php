@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
         $contact = getContactById($id);
 
         if ($contact) {
-            return $contact; // Renvoie directement le contact
+            return $contact;
         } else {
             exit("Aucun contact trouvé avec l'ID $id.");
         }
