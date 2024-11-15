@@ -57,22 +57,6 @@ function updateContact(int $id, string $name, string $email, string $telephone) 
     return $query->execute();
 }
 
-/**
- * Récupére un contact avec le nom
- * @param string $name
- * @return array|null
- */
-function getContactByName(string $name) {
-    $conn = connectDB();
-
-    $query = $conn->prepare("SELECT * FROM contact WHERE name LIKE :name LIMIT 1");
-    $query->bindValue(':name', '%' . $name . '%', PDO::PARAM_STR);
-    $query->execute();
-
-    $contact = $query->fetch(PDO::FETCH_ASSOC);
-
-    return $contact;
-}
 
 /**
  * Récupérer un contact par ID

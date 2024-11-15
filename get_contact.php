@@ -1,25 +1,20 @@
 <?php
-require_once './db.php';
+require_once './data.php';
 
-/**
- * Récupérer un contact par nom
- * @param string $name Le nom du contact
- * @return array|null Les informations du contact ou null si non trouvé
- * @throws Exception Si aucun contact n'est trouvé
- */
-function getContactByName($name) {
-    $conn = connectDB();
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+    $id = intval($_GET['id']);
 
-    $query = $conn->prepare("SELECT * FROM contact WHERE name LIKE :name LIMIT 1");
-    $query->bindValue(':name', '%' . $name . '%', PDO::PARAM_STR);
-    $query->execute();
+    if ($id > 0) {
+        $contact = getContactById($id);
 
-    $contact = $query->fetch(PDO::FETCH_ASSOC);
-
-    if (!$contact) {
-        throw new Exception("Aucun contact trouvé avec le nom '$name'.");
+        if ($contact) {
+            return $contact; // Renvoie directement le contact
+        } else {
+            exit("Aucun contact trouvé avec l'ID $id.");
+        }
+    } else {
+        exit("Veuillez fournir un ID valide.");
     }
-
-    return $contact;
+} else {
+    exit("Méthode non autorisée ou ID non fourni.");
 }
-
