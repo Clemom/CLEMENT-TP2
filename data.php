@@ -2,14 +2,13 @@
 require_once './db.php';
 
 /**
- * Ajouter un contact dans la base de données
- * 
- * @param string $name Le nom du contact
- * @param string $email L'email du contact
- * @param string $telephone Le numéro de téléphone du contact
- * @return bool Succès ou échec de l'opération
+ * Ajoute un contact
+ * @param string $name
+ * @param string $email
+ * @param string $telephone
+ * @return bool
  */
-function addContact($name, $email, $telephone) {
+function addContact(string $name,string $email,string $telephone) {
     $conn = connectDB();
     $query = $conn->prepare("INSERT INTO contact (name, email, telephone) VALUES (:name, :email, :telephone)");
     $query->bindParam(':name', $name);
@@ -19,9 +18,8 @@ function addContact($name, $email, $telephone) {
 }
 
 /**
- * Récupérer tous les contacts
- * 
- * @return array Liste de tous les contacts
+ * Récupére tous les contacts
+ * @return array
  */
 function getAllContacts() {
     $conn = connectDB();
@@ -30,12 +28,11 @@ function getAllContacts() {
 }
 
 /**
- * Supprimer un contact par ID
- * 
- * @param int $id L'ID du contact
- * @return bool Succès ou échec de la suppression
+ * Supprimer un contact avec grâce à l'ID
+ * @param int $id  
+ * @return bool 
  */
-function deleteContact($id) {
+function deleteContact(int $id) {
     $conn = connectDB();
     $query = $conn->prepare("DELETE FROM contact WHERE id = :id");
     $query->bindParam(':id', $id, PDO::PARAM_INT);
@@ -43,15 +40,14 @@ function deleteContact($id) {
 }
 
 /**
- * Mettre à jour un contact
- * 
- * @param int $id L'ID du contact
- * @param string $name Le nouveau nom du contact
- * @param string $email Le nouvel email du contact
- * @param string $telephone Le nouveau numéro de téléphone du contact
- * @return bool Succès ou échec de la mise à jour
+ * Mets à jour un contact
+ * @param int $id
+ * @param string $name 
+ * @param string $email
+ * @param string $telephone
+ * @return bool
  */
-function updateContact($id, $name, $email, $telephone) {
+function updateContact(int $id, string $name, string $email, string $telephone) {
     $conn = connectDB();
     $query = $conn->prepare("UPDATE contact SET name = :name, email = :email, telephone = :telephone WHERE id = :id");
     $query->bindParam(':id', $id, PDO::PARAM_INT);
@@ -62,16 +58,20 @@ function updateContact($id, $name, $email, $telephone) {
 }
 
 /**
- * Récupérer un contact par ID
- * 
- * @param int $id L'ID du contact
- * @return array|null Les informations du contact ou null si non trouvé
+ * Récupére un contact avec le nom
+ * @param string $name
+ * @return array|null
  */
-function getContact($id) {
+function getContactByName(string $name) {
     $conn = connectDB();
-    $query = $conn->prepare("SELECT * FROM contact WHERE id = :id");
-    $query->bindParam(':id', $id, PDO::PARAM_INT);
+
+    $query = $conn->prepare("SELECT * FROM contact WHERE name LIKE :name LIMIT 1");
+    $query->bindValue(':name', '%' . $name . '%', PDO::PARAM_STR);
     $query->execute();
-    return $query->fetch(PDO::FETCH_ASSOC);
+
+    $contact = $query->fetch(PDO::FETCH_ASSOC);
+
+    return $contact;
 }
+
 

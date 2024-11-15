@@ -15,9 +15,9 @@ $contacts = getAllContacts();
 </head>
 
 <body>
-    <nav></nav>
+    <div class="container-all">
     <h1>Gestion des Contacts</h1>
-
+    <div class="container-add-contact">
     <h2>Ajouter un contact</h2>
     <form method="POST" action="add_contact.php">
         <div>
@@ -34,7 +34,9 @@ $contacts = getAllContacts();
         </div>
         <button type="submit">Ajouter</button>
     </form>
+    </div>
 
+    <div class="container-list">
     <h2>Liste des contacts</h2>
     <table>
         <thead>
@@ -59,6 +61,8 @@ $contacts = getAllContacts();
             <?php endforeach; ?>
         </tbody>
     </table>
+    </div>
+    </div>
 </body>
 <?php require_once("./footer.php");?>
 

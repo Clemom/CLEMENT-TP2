@@ -3,7 +3,7 @@ require_once './data.php';
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
-    $contact = getContact($id);
+    $contact = getContactByName($id);
 
     if (!$contact) {
         die("Contact non trouvé.");
