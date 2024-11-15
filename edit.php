@@ -1,16 +1,19 @@
+<?php require_once("./header.php")?>
+<?php require_once("./footer.php")?>
 <?php
 require_once './data.php';
 
-if (isset($_GET['id'])) {
-    $id = intval($_GET['id']);
-    $contact = getContactByName($id);
-
-    if (!$contact) {
-        die("Contact non trouvé.");
-    }
-} else {
-    die("ID non fourni.");
+if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
+    die("ID invalide ou non fourni");
 }
+
+$id = intval($_GET['id']);
+$contact = getContactById($id);
+
+if (!$contact) {
+    die("Contact non trouvé");
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -24,7 +27,9 @@ if (isset($_GET['id'])) {
 </head>
 
 <body>
+    <div class="container-full-edit">
     <h1>Modifier un contact</h1>
+    <div class="container-edit">
     <form method="POST" action="update_contact.php">
         <input type="hidden" name="id" value="<?= htmlspecialchars($contact['id']) ?>">
         <div>
@@ -41,6 +46,8 @@ if (isset($_GET['id'])) {
         </div>
         <button type="submit">Mettre à jour</button>
     </form>
+    </div>
+    </div>
 </body>
 
 </html>

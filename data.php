@@ -74,4 +74,19 @@ function getContactByName(string $name) {
     return $contact;
 }
 
+/**
+ * Récupérer un contact par ID
+ * @param int $id
+ * @return array|null 
+ */
+function getContactById($id) {
+    $conn = connectDB();
+
+    $query = $conn->prepare("SELECT * FROM contact WHERE id = :id LIMIT 1");
+    $query->bindValue(':id', $id, PDO::PARAM_INT);
+    $query->execute();
+
+    return $query->fetch(PDO::FETCH_ASSOC);
+}
+
 
