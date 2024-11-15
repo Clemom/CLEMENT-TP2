@@ -8,7 +8,6 @@ Ce projet est une application web développée en PHP pour gérer des contacts v
 - **Afficher tous les contacts** : Liste complète des contacts avec options pour les modifier ou les supprimer.
 - **Modifier un contact** : Formulaire pré-rempli pour mettre à jour les informations d'un contact.
 - **Supprimer un contact** : Suppression rapide d'un contact avec confirmation.
-- **Rechercher un contact** : Récupération des informations d'un contact via son ID.
 
 ## Technologies utilisées
 - **Langage backend** : PHP
